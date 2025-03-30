@@ -59,7 +59,8 @@ model User {
   linkedin      String?
   github        String?
   website       String?
-  bio           String?
+  bio           String
+  about         String?
   image         String?
   slug          String        @unique
   isAdmin       Boolean       @default(false) // Campo para identificar o admin
@@ -99,8 +100,6 @@ model Review {
 model Technology {
   id                String              @id @default(cuid())
   name              String
-  description       String
-  image             String?
   slug              String              @unique
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
