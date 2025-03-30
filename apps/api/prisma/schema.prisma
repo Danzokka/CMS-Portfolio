@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id                String              @id @default(cuid())
+  name              String
+  description       String
+  image             String?
+  slug              String              @unique
+  status            String
+  startDate         DateTime
+  endDate           DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  ProjectTechnology ProjectTechnology[]
+  projectTypeId     String?
+  projectType       ProjectType?        @relation(fields: [projectTypeId], references: [id])
+  User              User?               @relation(fields: [userId], references: [id])
+  userId            String?
+  Review            Review[]
+}
+
+model ProjectType {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  slug        String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  projects    Project[]
+}
+
+model ProjectTechnology {
+  id           String     @id @default(cuid())
+  projectId    String
+  technologyId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  project      Project    @relation(fields: [projectId], references: [id])
+  technology   Technology @relation(fields: [technologyId], references: [id])
+}
+
+model User {
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  password      String
+  worksAt       String        @default("Not working")
+  location      String
+  linkedin      String?
+  github        String?
+  website       String?
+  bio           String?
+  image         String?
+  slug          String        @unique
+  isAdmin       Boolean       @default(false) // Campo para identificar o admin
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  especialities Especiality[] @relation("UserEspecialities") // Relacionamento m:n
+  projects      Project[]
+  technologies  Technology[]  @relation("UserTechnologies")
+  Review        Review[]
+  Post          Post[]
+  Comment       Comment[]
+  Like          Like[]
+}
+
+model Especiality {
+  id        String   @id @default(cuid())
+  name      String
+  icon      String?
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]   @relation("UserEspecialities") // Relacionamento m:n
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  projectId String
+  userId    String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  Project   Project  @relation(fields: [projectId], references: [id])
+}
+
+model Technology {
+  id                String              @id @default(cuid())
+  name              String
+  description       String
+  image             String?
+  slug              String              @unique
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  ProjectTechnology ProjectTechnology[]
+  users             User[]              @relation("UserTechnologies")
+}
+
+model Post {
+  id          String    @id @default(cuid())
+  title       String
+  content     String
+  image       String?
+  slug        String    @unique
+  category    String
+  tags        Tag[]     @relation("PostTags")
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      String?
+  User        User?     @relation(fields: [userId], references: [id])
+  Comment     Comment[]
+  Like        Like[]
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String
+  icon      String?
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts     Post[]   @relation("PostTags")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Post      Post     @relation(fields: [postId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+  Post      Post     @relation(fields: [postId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+}
