@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "portfolio-cms",
   "private": true,
   "scripts": {
     "build": "turbo run build",
