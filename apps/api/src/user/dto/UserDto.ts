@@ -31,8 +31,12 @@ export class CreateUserDto {
 
   image: string | undefined;
 
+  @IsNotEmpty()
+  @IsString({ each: true })
   especialities: string[];
 
+  @IsNotEmpty()
+  @IsString({ each: true })
   technologies: string[];
 }
 

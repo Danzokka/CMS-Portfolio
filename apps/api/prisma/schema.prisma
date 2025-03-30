@@ -8,22 +8,21 @@ datasource db {
 }
 
 model Project {
-  id                String              @id @default(cuid())
-  name              String
-  description       String
-  image             String?
-  slug              String              @unique
-  status            String
-  startDate         DateTime
-  endDate           DateTime?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  ProjectTechnology ProjectTechnology[]
-  projectTypeId     String?
-  projectType       ProjectType?        @relation(fields: [projectTypeId], references: [id])
-  User              User?               @relation(fields: [userId], references: [id])
-  userId            String?
-  Review            Review[]
+  id           String              @id @default(cuid())
+  name         String
+  description  String
+  image        String?
+  slug         String              @unique
+  status       String
+  startDate    DateTime
+  endDate      DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  technologies ProjectTechnology[]
+  types        ProjectType[]       @relation("ProjectType")
+  User         User                @relation(fields: [userId], references: [id])
+  userId       String
+  Review       Review[]
 }
 
 model ProjectType {
@@ -33,7 +32,7 @@ model ProjectType {
   slug        String    @unique
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  projects    Project[]
+  projects    Project[] @relation("ProjectType")
 }
 
 model ProjectTechnology {
