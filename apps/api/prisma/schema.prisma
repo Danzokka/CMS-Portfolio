@@ -26,12 +26,12 @@ model Project {
 }
 
 model ProjectType {
-  id          String    @id @default(cuid())
-  name        String
-  slug        String    @unique
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  projects    Project[] @relation("ProjectType")
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[] @relation("ProjectType")
 }
 
 model User {
@@ -104,8 +104,8 @@ model Post {
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  userId      String?
-  User        User?     @relation(fields: [userId], references: [id])
+  userId      String
+  User        User      @relation(fields: [userId], references: [id])
   Comment     Comment[]
   Like        Like[]
 }
