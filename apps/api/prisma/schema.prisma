@@ -8,19 +8,19 @@ datasource db {
 }
 
 model Project {
-  id           String              @id @default(cuid())
+  id           String        @id @default(cuid())
   name         String
   description  String
   image        String?
-  slug         String              @unique
+  slug         String        @unique
   status       String
   startDate    DateTime
   endDate      DateTime?
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
-  technologies ProjectTechnology[]
-  types        ProjectType[]       @relation("ProjectType")
-  User         User                @relation(fields: [userId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  technologies Technology[]  @relation("ProjectTechnology")
+  types        ProjectType[] @relation("ProjectType")
+  User         User          @relation(fields: [userId], references: [id])
   userId       String
   Review       Review[]
 }
@@ -28,21 +28,10 @@ model Project {
 model ProjectType {
   id          String    @id @default(cuid())
   name        String
-  description String
   slug        String    @unique
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   projects    Project[] @relation("ProjectType")
-}
-
-model ProjectTechnology {
-  id           String     @id @default(cuid())
-  projectId    String
-  technologyId String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  project      Project    @relation(fields: [projectId], references: [id])
-  technology   Technology @relation(fields: [technologyId], references: [id])
 }
 
 model User {
@@ -94,13 +83,13 @@ model Review {
 }
 
 model Technology {
-  id                String              @id @default(cuid())
-  name              String
-  slug              String              @unique
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  ProjectTechnology ProjectTechnology[]
-  users             User[]              @relation("UserTechnologies")
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Project   Project[] @relation("ProjectTechnology")
+  users     User[]    @relation("UserTechnologies")
 }
 
 model Post {
