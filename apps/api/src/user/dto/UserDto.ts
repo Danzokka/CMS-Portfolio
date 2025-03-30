@@ -54,10 +54,6 @@ export class UpdateUserPasswordDto {
   @IsString()
   @IsNotEmpty()
   password: string;
-
-  @IsString()
-  @IsNotEmpty()
-  newPassword: string;
 }
 
 export class UpdateUserDto {

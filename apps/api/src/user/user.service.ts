@@ -81,30 +81,18 @@ export class UserService {
         throw new BadRequestException('User not found');
       }
 
-      // Split stored password into salt and stored hash
-      const [salt, storedHash] = dbUser.password.split('&');
-
-      // Generate hash with provided password and retrieved salt
-      const computedHash = pbkdf2Sync(
+      updatePasswordData.password = this.generateSaltAndHash(
         updatePasswordData.password,
-        salt,
-        100000,
-        64,
-        'sha512',
-      ).toString('hex');
+      );
 
-      // Compare the computed hash with the stored hash
-      if (computedHash === storedHash) {
-        const newPassword = this.generateSaltAndHash(
-          updatePasswordData.newPassword,
-        );
-        await this.prisma.user.update({
-          where: { email: updatePasswordData.email },
-          data: { password: newPassword },
-        });
-      } else {
-        throw new BadRequestException('Authentication failed');
-      }
+      const user = await this.prisma.user.update({
+        where: { email: updatePasswordData.email },
+        data: {
+          password: updatePasswordData.password,
+        },
+      });
+
+      return user;
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
@@ -207,18 +195,21 @@ export class UserService {
     }
   }
 
-  async findUserByField (field: string, value: string) {
+  async findUserByField(field: string, value: string) {
     try {
       const user = await this.prisma.user.findUnique({
-        where: field === 'id'
-          ? { id: value }
-          : field === 'email'
-          ? { email: value }
-          : field === 'slug'
-          ? { slug: value }
-          : (() => {
-              throw new BadRequestException('Invalid field for user lookup');
-            })(),
+        where:
+          field === 'id'
+            ? { id: value }
+            : field === 'email'
+              ? { email: value }
+              : field === 'slug'
+                ? { slug: value }
+                : (() => {
+                    throw new BadRequestException(
+                      'Invalid field for user lookup',
+                    );
+                  })(),
       });
 
       if (!user) {
