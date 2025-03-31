@@ -20,15 +20,6 @@ export class UserController {
     }
   }
 
-  @Post('auth')
-  authUser(@Body() authDto: AuthUserDto) {
-    try {
-      return this.userService.auth(authDto);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   @Post('change-password')
   changePassword(@Body() updatePassword: UpdateUserPasswordDto) {
     try {

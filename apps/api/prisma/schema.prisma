@@ -36,8 +36,9 @@ model ProjectType {
 
 model User {
   id            String        @id @default(cuid())
+  username      String        @unique
   name          String
-  email         String        @unique
+  email         String        @unique 
   password      String
   worksAt       String        @default("Not working")
   location      String

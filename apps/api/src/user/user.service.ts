@@ -30,6 +30,7 @@ export class UserService {
 
       return await this.prisma.user.create({
         data: {
+          username: userData.username,
           name: userData.name,
           email: userData.email,
           slug: userData.name.toLowerCase().replace(/\s+/g, '-'),
@@ -116,6 +117,7 @@ export class UserService {
       const user = await this.prisma.user.update({
         where: { email: userData.email },
         data: {
+          username: userData.username,
           name: userData.name,
           slug: userData.name.toLowerCase().replace(/\s+/g, '-'),
           email: userData.email,
@@ -153,45 +155,6 @@ export class UserService {
       return user;
     } catch (error) {
       throw error;
-    }
-  }
-
-  async auth(user: AuthUserDto) {
-    try {
-      const dbUser = await this.prisma.user.findUnique({
-        where: {
-          email: user.email,
-        },
-      });
-
-      if (!dbUser) {
-        throw new BadRequestException('User not found');
-      }
-
-      // Split stored password into salt and stored hash
-      const [salt, storedHash] = dbUser.password.split('&');
-
-      // Generate hash with provided password and retrieved salt
-      const computedHash = pbkdf2Sync(
-        user.password,
-        salt,
-        100000,
-        64,
-        'sha512',
-      ).toString('hex');
-
-      // Compare the computed hash with the stored hash
-      if (computedHash === storedHash) {
-        const { password, ...userWithoutPassword } = dbUser;
-        return userWithoutPassword;
-      } else {
-        throw new BadRequestException('Authentication failed');
-      }
-    } catch (e) {
-      if (e instanceof BadRequestException) {
-        throw e;
-      }
-      throw new BadRequestException('Authentication failed');
     }
   }
 
