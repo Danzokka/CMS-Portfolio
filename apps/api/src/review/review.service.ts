@@ -97,7 +97,6 @@ export class ReviewService {
 
   async updateReview(reviewData: UpdateReviewDto, id: string) {
     try {
-
       await this.checkReview(id);
 
       const review = await this.prisma.review.update({
@@ -142,9 +141,24 @@ export class ReviewService {
     }
   }
 
+  async getPortfolioReviews() {
+    try {
+      const reviews = await this.prisma.review.findMany({
+        where: {
+          projectId: null,
+        },
+        include: {
+          user: true,
+        },
+      });
+      return reviews;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async deleteReview(id: string, userId: string) {
     try {
-
       await this.checkReview(id);
       await this.checkUserExists(userId);
 
@@ -158,7 +172,6 @@ export class ReviewService {
 
   async getReviewsByProjectId(projectId: string) {
     try {
-
       await this.checkProjectExists(projectId);
 
       const reviews = await this.prisma.review.findMany({
@@ -175,7 +188,6 @@ export class ReviewService {
 
   async getUserReviews(userId: string) {
     try {
-
       await this.checkUserExists(userId);
 
       const reviews = await this.prisma.review.findMany({

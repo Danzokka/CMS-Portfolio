@@ -53,15 +53,6 @@ export class ReviewController {
     }
   }
 
-  @Get(':id')
-  async getReviewById(@Param('id') id: string) {
-    try {
-      return this.reviewService.getReviewById(id);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   @UseGuards(AuthGuard)
   @Get('user')
   async getUserReviews(
@@ -74,10 +65,28 @@ export class ReviewController {
     }
   }
 
-  @Get('user/:id')
-  async getUserReviewsById(@Param('id') id: string) {
+  @Get('project/:id')
+  async getReviewsByProjectId(@Param('id') id: string) {
     try {
-      return this.reviewService.getReviewsByUserId(id);
+      return this.reviewService.getReviewsByProjectId(id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('portfolio')
+  async getUserReviewsById() {
+    try {
+      return this.reviewService.getPortfolioReviews();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get(':id')
+  async getReviewById(@Param('id') id: string) {
+    try {
+      return this.reviewService.getReviewById(id);
     } catch (error) {
       throw error;
     }
