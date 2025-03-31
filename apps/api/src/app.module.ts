@@ -14,6 +14,8 @@ import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { UserController } from './user/user.controller';
 import { AuthController } from './auth/auth.controller';
+import { ReviewModule } from './review/review.module';
+import { ReviewService } from './review/review.service';
 
 
 @Module({
@@ -24,8 +26,9 @@ import { AuthController } from './auth/auth.controller';
       signOptions: { expiresIn: '1d' },
     }),
     AuthModule,
+    ReviewModule,
   ],
   controllers: [AppController, PostController, UserController, AuthController],
-  providers: [AppService, ProjectService, UserService, PostService, PrismaService, AuthService],
+  providers: [AppService, ProjectService, UserService, PostService, PrismaService, AuthService, ReviewService],
 })
 export class AppModule {}
