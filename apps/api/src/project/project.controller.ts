@@ -6,11 +6,13 @@ import {
   Param,
   Post,
   Put,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/ProjectDto';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { RequestAuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('project')
 export class ProjectController {
@@ -18,9 +20,11 @@ export class ProjectController {
 
   @UseGuards(AdminGuard)
   @Post()
-  async createProject(@Body() projectDto: CreateProjectDto) {
+  async createProject(@Body() projectDto: CreateProjectDto, @Request() req:  Request & { user: RequestAuthGuard['user'] }) {
+    console.log('req', req.user);
+    console.log(projectDto);
     try {
-      return this.projectService.createProject(projectDto);
+      return this.projectService.createProject(projectDto, req.user.id);
     } catch (error) {
       throw error;
     }

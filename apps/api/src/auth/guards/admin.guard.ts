@@ -23,9 +23,12 @@ export class AdminGuard implements CanActivate {
       throw new UnauthorizedException('No token provided');
     }
 
+    console.log('Token:', token);
+    console.log(request.username);
+
     const user = await this.prisma.user.findUnique({
       where: {
-        id: request.user.id,
+        username: request.username,
       },
     });
 

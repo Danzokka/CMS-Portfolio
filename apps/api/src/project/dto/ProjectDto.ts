@@ -20,10 +20,6 @@ export class CreateProjectDto {
   endDate: Date | undefined;
 
   @IsNotEmpty()
-  @IsString()
-  userId: string;
-
-  @IsNotEmpty()
   @IsString({ each: true })
   technologies: string[];
 

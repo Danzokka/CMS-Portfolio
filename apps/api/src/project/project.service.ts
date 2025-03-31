@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProjectDto, UpdateProjectDto } from './dto/ProjectDto';
 
@@ -6,8 +6,24 @@ import { CreateProjectDto, UpdateProjectDto } from './dto/ProjectDto';
 export class ProjectService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createProject(projectData: CreateProjectDto) {
+  async checkProjectExists(slug: string) {
+    const project = await this.prisma.project.findUnique({
+      where: { slug },
+    });
+
+    if (project) {
+      throw new BadRequestException('Project with this slug already exists');
+    }
+    return false;
+  }
+
+  async createProject(projectData: CreateProjectDto, id: string) {
     try {
+      
+      await this.checkProjectExists(
+        projectData.name.toLowerCase().replace(/\s+/g, '-'),
+      );
+
       const project = await this.prisma.project.create({
         data: {
           slug: projectData.name.toLowerCase().replace(/\s+/g, '-'),
@@ -17,7 +33,7 @@ export class ProjectService {
           status: projectData.status,
           startDate: projectData.startDate,
           endDate: projectData.endDate,
-          userId: projectData.userId,
+          userId: id,
           technologies: {
             connectOrCreate: projectData.technologies.map((technology) => ({
               where: { slug: technology.toLowerCase().replace(/\s+/g, '-') },
