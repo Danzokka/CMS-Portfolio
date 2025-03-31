@@ -160,6 +160,19 @@ export class UserService {
 
   async findUserByField(field: string, value: string) {
     try {
+      if (!field || !value) {
+        throw new BadRequestException('Field and value are required');
+      }
+
+      if (
+        field !== 'id' &&
+        field !== 'email' &&
+        field !== 'slug' &&
+        field !== 'username'
+      ) {
+        throw new BadRequestException('Invalid field for user lookup');
+      }
+
       const user = await this.prisma.user.findUnique({
         where:
           field === 'id'
@@ -168,11 +181,11 @@ export class UserService {
               ? { email: value }
               : field === 'slug'
                 ? { slug: value }
-                : (() => {
-                    throw new BadRequestException(
-                      'Invalid field for user lookup',
-                    );
-                  })(),
+                : { username: value },
+        include: {
+          especialities: true,
+          technologies: true,
+        },
       });
 
       if (!user) {

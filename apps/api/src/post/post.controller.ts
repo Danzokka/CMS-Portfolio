@@ -1,19 +1,13 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/PostDto';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @UseGuards(AdminGuard)
   @Post()
   async createPost(@Body() postDto: CreatePostDto) {
     try {
@@ -23,11 +17,9 @@ export class PostController {
     }
   }
 
+  @UseGuards(AdminGuard)
   @Put(':slug')
-  async updatePost(
-    @Body() postDto: CreatePostDto,
-    @Param('slug') slug: string,
-  ) {
+  async updatePost(@Body() postDto: CreatePostDto, @Param('slug') slug: string) {
     try {
       return this.postService.updatePost(postDto, slug);
     } catch (error) {
@@ -35,6 +27,7 @@ export class PostController {
     }
   }
 
+  @UseGuards(AdminGuard)
   @Put('publish/:slug')
   async publishPost(@Param('slug') slug: string) {
     try {
@@ -44,6 +37,7 @@ export class PostController {
     }
   }
 
+  @UseGuards(AdminGuard)
   @Put('unpublish/:slug')
   async unpublishPost(@Param('slug') slug: string) {
     try {
@@ -79,6 +73,7 @@ export class PostController {
     }
   }
 
+  @UseGuards(AdminGuard)
   @Delete(':slug')
   async deletePost(@Param('slug') slug: string) {
     try {
