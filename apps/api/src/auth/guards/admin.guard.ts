@@ -6,11 +6,13 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
+    private readonly authService: AuthService,
     private readonly prisma: PrismaService,
   ) {}
 
@@ -23,14 +25,7 @@ export class AdminGuard implements CanActivate {
       throw new UnauthorizedException('No token provided');
     }
 
-    console.log('Token:', token);
-    console.log(request.username);
-
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username: request.username,
-      },
-    });
+    const user = await this.authService.getUserByToken(token);
 
     if (!user) {
       throw new UnauthorizedException('User not found');

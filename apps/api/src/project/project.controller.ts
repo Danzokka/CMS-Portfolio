@@ -21,8 +21,6 @@ export class ProjectController {
   @UseGuards(AdminGuard)
   @Post()
   async createProject(@Body() projectDto: CreateProjectDto, @Request() req:  Request & { user: RequestAuthGuard['user'] }) {
-    console.log('req', req.user);
-    console.log(projectDto);
     try {
       return this.projectService.createProject(projectDto, req.user.id);
     } catch (error) {

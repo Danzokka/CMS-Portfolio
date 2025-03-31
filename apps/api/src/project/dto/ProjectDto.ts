@@ -14,7 +14,6 @@ export class CreateProjectDto {
   status: string;
 
   @IsNotEmpty()
-  @IsDate()
   startDate: Date;
 
   endDate: Date | undefined;
