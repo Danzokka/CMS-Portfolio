@@ -1,21 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { CreatePostDto } from './dto/PostDto';
+import { CreatePostDto, UpdatePostDto } from './dto/PostDto';
 
 @Injectable()
 export class PostService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createPost(post: CreatePostDto) {
+  async checkUserExists(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User does not exist');
+    }
+    return true;
+  }
+
+  async checkPostExists(slug: string) {
+    const post = await this.prisma.post.findUnique({
+      where: { slug },
+    });
+
+    if (post) {
+      throw new BadRequestException('Post already exists');
+    }
+    return true;
+  }
+
+  async createPost(post: CreatePostDto, username: string) {
     try {
+      
+      // Check
+
+      await Promise.all([
+        this.checkUserExists(username),
+        this.checkPostExists(post.title.toLowerCase().replace(/\s+/g, '-')),
+      ]);
+
+      // Create the post
+
       return await this.prisma.post.create({
         data: {
           title: post.title,
           image: post.image,
           content: post.content,
           slug: post.title.toLowerCase().replace(/\s+/g, '-'),
+          username: username,
           category: post.category,
-          userId: post.userId,
           published: post.published,
           publishedAt: post.publishedAt,
           tags: {
@@ -28,13 +60,22 @@ export class PostService {
             })),
           },
         },
-      })
+        include: {
+          tags: {
+            select: {
+              name: true,
+              slug: true,
+              icon: true,
+            },
+          },
+        },
+      });
     } catch (error) {
-      throw error
+      throw new BadRequestException(error.message);
     }
   }
 
-  async updatePost(post: CreatePostDto, slug: string) {
+  async updatePost(post: UpdatePostDto, slug: string) {
     try {
       return await this.prisma.post.update({
         where: { slug },
@@ -44,7 +85,6 @@ export class PostService {
           content: post.content,
           slug: post.title.toLowerCase().replace(/\s+/g, '-'),
           category: post.category,
-          userId: post.userId,
           published: post.published,
           publishedAt: post.publishedAt,
           tags: {
@@ -57,9 +97,18 @@ export class PostService {
             })),
           },
         },
-      })
+        include: {
+          tags: {
+            select: {
+              name: true,
+              slug: true,
+              icon: true,
+            },
+          }
+        },
+      });
     } catch (error) {
-      throw error
+      throw new BadRequestException('Post does not exist');
     }
   }
 
@@ -67,11 +116,17 @@ export class PostService {
     try {
       return await this.prisma.post.findMany({
         include: {
-          tags: true,
+          tags: {
+            select: {
+              name: true,
+              slug: true,
+              icon: true,
+            },
+          }
         },
-      })
+      });
     } catch (error) {
-      throw error
+      throw new BadRequestException('Error fetching posts');
     }
   }
 
@@ -82,9 +137,9 @@ export class PostService {
         include: {
           tags: true,
         },
-      })
+      });
     } catch (error) {
-      throw error
+      throw new BadRequestException('Post does not exist');
     }
   }
 
@@ -96,9 +151,9 @@ export class PostService {
           published: true,
           publishedAt: new Date(),
         },
-      })
+      });
     } catch (error) {
-      throw error
+      throw new BadRequestException('Post does not exist');
     }
   }
 
@@ -110,9 +165,9 @@ export class PostService {
           published: false,
           publishedAt: null,
         },
-      })
+      });
     } catch (error) {
-      throw error
+      throw new BadRequestException('Post does not exist');
     }
   }
 
@@ -120,22 +175,31 @@ export class PostService {
     try {
       return await this.prisma.post.delete({
         where: { slug },
-      })
+      });
     } catch (error) {
-      throw error
+      throw new BadRequestException('Post does not exist');
     }
   }
 
-  async getPostsByUserId(userId: string) {
+  async getPostsByUsername(username: string) {
+    // Check if the user exists
+    await this.checkUserExists(username);
+
     try {
       return await this.prisma.post.findMany({
-        where: { userId },
+        where: { username },
         include: {
-          tags: true,
+          tags: {
+            select: {
+              name: true,
+              slug: true,
+              icon: true,
+            },
+          }
         },
-      })
+      });
     } catch (error) {
-      throw error
+      throw new BadRequestException('User does not exist');
     }
   }
 }

@@ -1,25 +1,42 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { PostService } from './post.service';
-import { CreatePostDto } from './dto/PostDto';
+import { CreatePostDto, UpdatePostDto } from './dto/PostDto';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { AuthGuard, RequestAuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard)
   @Post()
-  async createPost(@Body() postDto: CreatePostDto) {
+  async createPost(
+    @Body() postDto: CreatePostDto,
+    @Request() request: Request & { user: RequestAuthGuard['user'] },
+  ) {
     try {
-      return this.postService.createPost(postDto);
+      return this.postService.createPost(postDto, request.user.username);
     } catch (error) {
       throw error;
     }
   }
 
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   @Put(':slug')
-  async updatePost(@Body() postDto: CreatePostDto, @Param('slug') slug: string) {
+  async updatePost(
+    @Body() postDto: UpdatePostDto,
+    @Param('slug') slug: string,
+  ) {
     try {
       return this.postService.updatePost(postDto, slug);
     } catch (error) {
@@ -27,7 +44,7 @@ export class PostController {
     }
   }
 
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   @Put('publish/:slug')
   async publishPost(@Param('slug') slug: string) {
     try {
@@ -37,7 +54,8 @@ export class PostController {
     }
   }
 
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard, AdminGuard)
+
   @Put('unpublish/:slug')
   async unpublishPost(@Param('slug') slug: string) {
     try {
@@ -64,16 +82,16 @@ export class PostController {
     }
   }
 
-  @Get('user/:userid')
-  async getPostsByUserId(@Param('userid') userId: string) {
+  @Get('user/:username')
+  async getPostsByUsername(@Param('username') username: string) {
     try {
-      return this.postService.getPostsByUserId(userId);
+      return this.postService.getPostsByUsername(username);
     } catch (error) {
       throw error;
     }
   }
 
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   @Delete(':slug')
   async deletePost(@Param('slug') slug: string) {
     try {

@@ -105,8 +105,8 @@ model Post {
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  userId      String
-  User        User      @relation(fields: [userId], references: [id])
+  username    String
+  User        User      @relation(fields: [username], references: [username])
   Comment     Comment[]
   Like        Like[]
 }

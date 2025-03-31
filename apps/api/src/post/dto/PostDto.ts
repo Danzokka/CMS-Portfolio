@@ -24,10 +24,6 @@ export class CreatePostDto {
   published: boolean;
 
   publishedAt: Date | undefined;
-
-  @IsNotEmpty()
-  @IsString()
-  userId: string;
 }
 
 export class UpdatePostDto {

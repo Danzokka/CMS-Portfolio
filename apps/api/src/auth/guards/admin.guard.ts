@@ -33,7 +33,7 @@ export class AdminGuard implements CanActivate {
       throw new UnauthorizedException('User not found');
     }
 
-    if (!user.isAdmin) {
+    if (!user.isAdmin && user.username !== process.env.ADMIN_USERNAME) {
       throw new UnauthorizedException('User is not an admin');
     }
 
@@ -50,3 +50,11 @@ export class AdminGuard implements CanActivate {
     }
   }
 }
+
+export type RequestAdminGuard = {
+  user: {
+    username: string;
+    email: string;
+    id: string;
+  };
+};

@@ -32,3 +32,11 @@ export class AuthGuard implements CanActivate {
     }
   }
 }
+
+export type RequestAuthGuard = {
+  user: {
+    username: string;
+    email: string;
+    id: string;
+  };
+}
