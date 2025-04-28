@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
-const page = () => {
+const Home = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div className="w-full h-full flex-col items-center justify-center">
+      <h1 className="font-bold text-4xl w-full text-center ">Home</h1>
+    </div>
+  );
+};
 
-export default page
+export default Home;
