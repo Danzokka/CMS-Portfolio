@@ -1,9 +1,20 @@
+"use client";
+
 import React from "react";
 import Logo from "./Logo";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
+
+  const pathname = usePathname();
+  const isAuthPage = pathname.startsWith("/auth");
+
+  if (isAuthPage) {
+    return null; // Don't render the footer on auth pages
+  }
+
   return (
-    <footer className="">
+    <footer >
       <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex justify-center text-teal-600 dark:text-teal-300">
           <Logo />
