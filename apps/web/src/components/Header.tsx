@@ -3,8 +3,11 @@ import Logo from "./Logo";
 import Link from "next/link";
 
 const Header = () => {
+
+  
+
   return (
-    <header className="bg-white dark:bg-gray-900">
+    <header className="">
       <div className="flex h-24 w-full items-center justify-around gap-8 px-4 sm:px-6 lg:px-8">
         <Link className="block text-teal-600 dark:text-teal-300" href="#">
           <span className="sr-only">Home</span>
