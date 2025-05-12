@@ -9,7 +9,10 @@ const Hero = () => {
     <div className="flex flex-col w-full justify-between gap-6 py-10 px-8">
       <div className="max-w-2xl">
         <div className="flex items-center gap-2">
-          <TypingAnimation className="text-4xl font-bold tracking-wide" duration={100}>
+          <TypingAnimation
+            className="text-4xl font-bold tracking-wide"
+            duration={100}
+          >
             Olá, eu sou
           </TypingAnimation>
           <TypingAnimation
@@ -34,32 +37,19 @@ const Hero = () => {
         </BoxReveal>
 
         <div className="mt-2 space-y-4 text-lg text-gray-700 dark:text-gray-300">
-          <BoxReveal duration={2}>
-            <div className="flex flex-col gap-4 text-lg">
-              <p>
-                Sou um desenvolvedor fullstack com experiência em criar soluções
-                de ponta a ponta, sempre buscando combinar design intuitivo com
-                código eficiente e escalável.
-              </p>
+          <div className="flex flex-col gap-4 text-lg">
+            <TypingAnimation className="text-lg font-medium" duration={30} delay={1500}>
+              Sou um desenvolvedor fullstack com experiência em criar soluções
+              de ponta a ponta, sempre buscando combinar design intuitivo com
+              código eficiente e escalável.
+            </TypingAnimation>
 
-              <p>
-                Minha paixão está na criação de aplicações web modernas que
-                oferecem experiências excepcionais aos usuários, sempre com foco
-                em performance e acessibilidade.
-              </p>
-            </div>
-          </BoxReveal>
-
-          <BoxReveal>
-            <div className="flex gap-4">
-              <Button size={"lg"} className="bg-orange-800 text-white font-bold hover:bg-orange-700">
-                Projetos
-              </Button>
-              <Button size={"lg"}>
-                Contato
-              </Button>
-            </div>
-          </BoxReveal>
+            <TypingAnimation className="text-lg font-medium" duration={30} delay={(7 * 1000)}>
+              Minha paixão está na criação de aplicações web modernas que
+              oferecem experiências excepcionais aos usuários, sempre com foco
+              em performance e acessibilidade.
+            </TypingAnimation>
+          </div>
         </div>
       </div>
     </div>
