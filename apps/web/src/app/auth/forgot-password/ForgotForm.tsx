@@ -40,7 +40,7 @@ const formSchema = z.object({
   }),
 });
 
-export function LoginForm() {
+export function ForgotForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -84,12 +84,19 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel className="w-full flex justify-between">
                   <span>Password</span>
-                  <Link href="/auth/forgot-password" className="text-muted-foreground cursor-pointer hover:text-primary font-semibold">
+                  <Link
+                    href="/auth/forgot-password"
+                    className="text-muted-foreground cursor-pointer hover:text-primary font-semibold"
+                  >
                     Forgot your password?
                   </Link>
                 </FormLabel>
                 <FormControl>
-                  <PasswordInput type="password" placeholder="********" {...field} />
+                  <PasswordInput
+                    type="password"
+                    placeholder="********"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>This is your secret password.</FormDescription>
                 <FormMessage />
@@ -98,7 +105,10 @@ export function LoginForm() {
           />
           <span className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link href={"/auth/signup"} className="text-sm text-muted-foreground cursor-pointer hover:text-primary font-semibold">
+            <Link
+              href={"/auth/signup"}
+              className="text-sm text-muted-foreground cursor-pointer hover:text-primary font-semibold"
+            >
               Sign up
             </Link>
           </span>
@@ -111,4 +121,4 @@ export function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default ForgotForm;
