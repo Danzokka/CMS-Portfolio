@@ -1,0 +1,41 @@
+{
+  "chat.promptFiles": true,
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.instructionsFilesLocations": [
+    ".github/instructions"
+  ],
+  "chat.promptFilesLocations": [
+    ".github/prompts"
+  ],
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "text": "Always add TypeScript types for all new code"
+    },
+    {
+      "text": "Follow the project's architectural patterns and naming conventions"
+    },
+    {
+      "text": "Include comprehensive error handling and logging"
+    }
+  ],
+  "github.copilot.chat.testGeneration.instructions": [
+    {
+      "file": ".github/instructions/testing.instructions.md"
+    }
+  ],
+  "github.copilot.chat.reviewSelection.instructions": [
+    {
+      "file": ".github/instructions/code-review.instructions.md"
+    }
+  ],
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "file": ".github/instructions/commit-messages.instructions.md"
+    }
+  ],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+    {
+      "file": ".github/instructions/pull-request.instructions.md"
+    }
+  ]
+}
