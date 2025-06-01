@@ -16,19 +16,29 @@ import { UserController } from './user/user.controller';
 import { AuthController } from './auth/auth.controller';
 import { ReviewModule } from './review/review.module';
 import { ReviewService } from './review/review.service';
-
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ProjectModule, UserModule, PostModule,
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
-    }),
+  imports: [
+    ProjectModule,
+    UserModule,
+    PostModule,
     AuthModule,
     ReviewModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
   ],
   controllers: [AppController, PostController, UserController, AuthController],
-  providers: [AppService, ProjectService, UserService, PostService, PrismaService, AuthService, ReviewService],
+  providers: [
+    AppService,
+    ProjectService,
+    UserService,
+    PostService,
+    PrismaService,
+    AuthService,
+    ReviewService,
+  ],
 })
 export class AppModule {}

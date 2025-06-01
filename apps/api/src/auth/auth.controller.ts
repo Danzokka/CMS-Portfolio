@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Get, UseGuards, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Get,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthUserDto } from 'src/user/dto/UserDto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -10,6 +17,7 @@ export class AuthController {
   @Post()
   login(@Body() auth: AuthUserDto) {
     try {
+      console.log('Login attempt with:', auth);
       return this.authService.authenticate(auth);
     } catch (error) {
       throw error;
