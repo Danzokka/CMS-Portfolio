@@ -1,7 +1,7 @@
 import React from "react";
 import QueryProvider from "./query";
 import { ThemeProvider } from "./theme";
-import { AuthProvider } from "@/app/providers";
+import { AuthProvider } from "@/context/session";
 import { SessionMonitor } from "@/components/session-monitor";
 
 const Providers = (
