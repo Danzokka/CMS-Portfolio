@@ -15,10 +15,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
-  login(@Body() auth: AuthUserDto) {
+  async login(@Body() auth: AuthUserDto) {
     try {
       console.log('Login attempt with:', auth);
-      return this.authService.authenticate(auth);
+      const login = await this.authService.authenticate(auth);
+      console.log('Login successful:', login);
+      return login
     } catch (error) {
       throw error;
     }

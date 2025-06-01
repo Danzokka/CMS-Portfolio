@@ -1,7 +1,12 @@
 import Hero from "@/components/Home/Hero";
+import { getServerSession } from "next-auth";
 import React from "react";
 
-const Home = () => {
+const Home = async () => {
+  const session =  await getServerSession();
+
+  console.log("[Home] Session:", session);
+  
   return (
     <div className="w-full h-full flex-col items-center justify-center">
       <Hero />
