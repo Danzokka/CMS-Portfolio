@@ -4,15 +4,40 @@ applyTo: "apps/web/**/*.{ts,tsx,js,jsx}"
 
 # Frontend Development Guidelines - Next.js + React
 
+## Links
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://react.dev/)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/blog/tailwindcss-v4)
+- [Shadcn UI Documentation](https://ui.shadcn.com/docs)
+- [Magic UI Documentation](https://magicui.design/docs)
+- [React Query Documentation](https://tanstack.com/query/latest/docs/framework/react/overview)
+- [Next.js Project Structure](https://nextjs.org/docs/app/getting-started/project-structure)
+
 ## Tech Stack
 
 - Next.js 15+ com App Router (NUNCA use pages router)
 - React 19+ com Server Components
 - TypeScript com interfaces (não types)
-- Tailwind CSS + Shadcn UI + Radix UI
+- Tailwind CSS + Shadcn UI + Magic UI
 - React Query (TanStack Query) para data fetching no client side
 
 ## Estrutura e Padrões
+
+- Siga a estrutura de diretórios do Next.js App Router assim como esta no link
+- Use nomes de diretórios em lowercase com hífens (ex: `components/auth-wizard`)
+- Prefira named exports para componentes
+- Server Actions ficara na pasta `src/server/actions`
+- Use `src` como raiz do código fonte
+- Todos componentes usados apenas pela pagina em si ficara na pasta dele em uma pasta `_components` (ex: `src/app/projects/_components/ProjectCard.tsx`)
+- Todas as funcoes de lib usados apenas por ele, ficara na pasta dele em uma pasta `_lib` (ex: `src/app/projects/_lib/format.ts`)
+- Use `src/server/actions` para server actions que buscam dados
+- Use `src/server/actions` para server actions que executam ações (ex: criar, atualizar, deletar)
+- Use `src/server/actions` para server actions que executam ações de autenticação (ex: login, logout)
+- Use `src/server/functions` para funções utilitárias do servidor que não são server actions
+- Use `src/server/middleware` para middlewares do Next.js
+- Todas as rotas deverão ter um `layout.tsx` para definir o layout da página, podendo ser root ou apenas implementando do layout geral.
+- Rotas protegidas serão protegidas inicialmente no layout da rota.
 
 ### Componentes
 

@@ -85,7 +85,7 @@ export function ForgotForm() {
                 <FormLabel className="w-full flex justify-between">
                   <span>Password</span>
                   <Link
-                    href="/auth/forgot-password"
+                    href="/forgot-password"
                     className="text-muted-foreground cursor-pointer hover:text-primary font-semibold"
                   >
                     Forgot your password?
@@ -106,7 +106,7 @@ export function ForgotForm() {
           <span className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link
-              href={"/auth/signup"}
+              href={"/signup"}
               className="text-sm text-muted-foreground cursor-pointer hover:text-primary font-semibold"
             >
               Sign up

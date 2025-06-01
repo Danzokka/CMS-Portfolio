@@ -34,7 +34,7 @@ const Header = () => {
 
           <div className="flex items-center gap-4">
             <Button variant={"default"} asChild className="font-bold">
-              <Link href="/auth/login">Login</Link>
+              <Link href="/login">Login</Link>
             </Button>
           </div>
         </div>
