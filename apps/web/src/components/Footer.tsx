@@ -2,8 +2,16 @@
 
 import React from "react";
 import Logo from "./Logo";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
+
+  const pathname = usePathname();
+  const isAuthPage = pathname.startsWith("/login") || pathname.startsWith("/signup") || pathname.startsWith("/forgot-password");
+
+  if (isAuthPage) {
+    return null; // Don't render the footer on auth pages
+  }
 
   return (
     <footer >
