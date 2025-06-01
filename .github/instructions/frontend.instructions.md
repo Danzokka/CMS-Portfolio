@@ -13,6 +13,7 @@ applyTo: "apps/web/**/*.{ts,tsx,js,jsx}"
 - [Magic UI Documentation](https://magicui.design/docs)
 - [React Query Documentation](https://tanstack.com/query/latest/docs/framework/react/overview)
 - [Next.js Project Structure](https://nextjs.org/docs/app/getting-started/project-structure)
+- [Next Auth Documentation](https://next-auth.js.org/getting-started/introduction)
 
 ## Tech Stack
 
@@ -21,6 +22,7 @@ applyTo: "apps/web/**/*.{ts,tsx,js,jsx}"
 - TypeScript com interfaces (não types)
 - Tailwind CSS + Shadcn UI + Magic UI
 - React Query (TanStack Query) para data fetching no client side
+- Next Auth para autenticação
 
 ## Estrutura e Padrões
 

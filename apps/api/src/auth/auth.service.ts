@@ -83,4 +83,56 @@ export class AuthService {
       throw new UnauthorizedException('Invalid token');
     }
   }
+
+  async getProfile(userPayload: any) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: userPayload.id,
+        },
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          name: true,
+          worksAt: true,
+          location: true,
+          linkedin: true,
+          github: true,
+          website: true,
+        },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async refreshToken(userPayload: any) {
+    try {
+      // Generate new token with the same payload
+      const tokenPayload = {
+        username: userPayload.username,
+        email: userPayload.email,
+        id: userPayload.id,
+      };
+
+      const accessToken = this.jwtService.sign(tokenPayload);
+
+      return {
+        accessToken,
+        username: userPayload.username,
+        email: userPayload.email,
+        id: userPayload.id,
+        refreshedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }

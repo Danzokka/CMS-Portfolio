@@ -2,7 +2,6 @@ import React from "react";
 import { TypingAnimation } from "../magicui/typing-animation";
 import { WordRotate } from "../magicui/word-rotate";
 import { BoxReveal } from "../magicui/box-reveal";
-import { Button } from "../ui/button";
 
 const Hero = () => {
   return (
@@ -38,13 +37,21 @@ const Hero = () => {
 
         <div className="mt-2 space-y-4 text-lg text-gray-700 dark:text-gray-300">
           <div className="flex flex-col gap-4 text-lg">
-            <TypingAnimation className="text-lg font-medium" duration={30} delay={1500}>
+            <TypingAnimation
+              className="text-lg font-medium"
+              duration={30}
+              delay={1500}
+            >
               Sou um desenvolvedor fullstack com experiência em criar soluções
               de ponta a ponta, sempre buscando combinar design intuitivo com
               código eficiente e escalável.
             </TypingAnimation>
 
-            <TypingAnimation className="text-lg font-medium" duration={30} delay={(7 * 1000)}>
+            <TypingAnimation
+              className="text-lg font-medium"
+              duration={30}
+              delay={7 * 1000}
+            >
               Minha paixão está na criação de aplicações web modernas que
               oferecem experiências excepcionais aos usuários, sempre com foco
               em performance e acessibilidade.

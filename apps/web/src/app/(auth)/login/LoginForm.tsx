@@ -3,6 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useState, useTransition } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,40 +23,62 @@ import { PasswordInput } from "@/components/ui/password-input";
 import Link from "next/link";
 
 const formSchema = z.object({
-  usernameOrEmail: z
-    .string()
-    .min(1, {
-      message: "Username or email is required.",
-    })
-    .regex(/^[a-zA-Z0-9._-]+$/, {
-      message:
-        "Username can only contain letters, numbers, dots, underscores, and hyphens.",
-    }),
-  email: z
-    .string()
-    .email({
-      message: "Invalid email address.",
-    })
-    .optional(),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
 });
 
 export function LoginForm() {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string>("");
+  const router = useRouter();
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      usernameOrEmail: "",
+      email: "",
+      password: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setError("");
+
+    startTransition(async () => {
+      try {
+        console.log("[LoginForm] Attempting login...");
+
+        const result = await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+          redirect: false,
+        });
+
+        if (result?.error) {
+          console.error("[LoginForm] Authentication failed:", result.error);
+          setError(
+            "Invalid credentials. Please check your username/email and password."
+          );
+          return;
+        }
+
+        if (result?.ok) {
+          console.log("[LoginForm] Login successful, redirecting...");
+          router.push("/dashboard");
+          return;
+        }
+
+        setError("Login failed. Please try again.");
+      } catch (error: unknown) {
+        console.error("[LoginForm] Unexpected error:", error);
+        setError("An unexpected error occurred. Please try again.");
+      }
+    });
   }
 
   return (
@@ -61,17 +86,25 @@ export function LoginForm() {
       <h1 className="text-2xl font-bold w-full text-center">Login</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {error && (
+            <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
+              {error}
+            </div>
+          )}
           <FormField
             control={form.control}
-            name="usernameOrEmail"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username or Email</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input
+                    placeholder="Enter your email address"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
-                  This is your public display name.
+                  Enter your email address.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -84,26 +117,36 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel className="w-full flex justify-between">
                   <span>Password</span>
-                  <Link href="/forgot-password" className="text-muted-foreground cursor-pointer hover:text-primary font-semibold">
+                  <Link
+                    href="/forgot-password"
+                    className="text-muted-foreground cursor-pointer hover:text-primary font-semibold"
+                  >
                     Forgot your password?
                   </Link>
                 </FormLabel>
                 <FormControl>
-                  <PasswordInput type="password" placeholder="********" {...field} />
+                  <PasswordInput
+                    type="password"
+                    placeholder="********"
+                    {...field}
+                  />
                 </FormControl>
-                <FormDescription>This is your secret password.</FormDescription>
+                <FormDescription>Enter your password.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <span className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link href={"/signup"} className="text-sm text-muted-foreground cursor-pointer hover:text-primary font-semibold">
+            <Link
+              href={"/signup"}
+              className="text-sm text-muted-foreground cursor-pointer hover:text-primary font-semibold"
+            >
               Sign up
             </Link>
           </span>
-          <Button type="submit" className="w-full mt-4">
-            Submit
+          <Button type="submit" className="w-full mt-4" disabled={isPending}>
+            {isPending ? "Signing in..." : "Sign In"}
           </Button>
         </form>
       </Form>
