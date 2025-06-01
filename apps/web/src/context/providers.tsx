@@ -2,7 +2,6 @@ import React from "react";
 import QueryProvider from "./query";
 import { ThemeProvider } from "./theme";
 import { AuthProvider } from "@/context/session";
-import { SessionMonitor } from "@/components/session-monitor";
 
 const Providers = (
   { children }: { children: React.ReactNode } = { children: null }
@@ -11,7 +10,7 @@ const Providers = (
     <AuthProvider>
       <QueryProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SessionMonitor>{children}</SessionMonitor>
+          {children}
         </ThemeProvider>
       </QueryProvider>
     </AuthProvider>
