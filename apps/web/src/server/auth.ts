@@ -37,13 +37,17 @@ interface TokenRefreshResponse {
 async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
     console.log("[NextAuth] Refreshing access token...");
-    
+
     // Call the refresh endpoint with the current token
-    const response = await api.post<TokenRefreshResponse>("/auth/refresh", {}, {
-      headers: {
-        Authorization: `Bearer ${token.accessToken}`,
-      },
-    });
+    const response = await api.post<TokenRefreshResponse>(
+      "/auth/refresh",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+        },
+      }
+    );
 
     const { accessToken, username, email, id } = response.data;
 
@@ -59,7 +63,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
     };
   } catch (error) {
     console.error("[NextAuth] Error refreshing access token:", error);
-    
+
     // If refresh fails, return token with error
     return {
       ...token,
@@ -149,8 +153,9 @@ export const authOptions: NextAuthOptions = {
       }
 
       // Check if we should refresh the token (refresh 30 minutes before expiry)
-      const shouldRefresh = Date.now() > ((token.expiresAt as number) - 30 * 60 * 1000);
-      
+      const shouldRefresh =
+        Date.now() > (token.expiresAt as number) - 30 * 60 * 1000;
+
       if (shouldRefresh) {
         console.log("[NextAuth] Token will expire soon, refreshing...");
         return await refreshAccessToken(token);

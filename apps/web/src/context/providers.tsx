@@ -11,9 +11,7 @@ const Providers = (
     <AuthProvider>
       <QueryProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SessionMonitor>
-            {children}
-          </SessionMonitor>
+          <SessionMonitor>{children}</SessionMonitor>
         </ThemeProvider>
       </QueryProvider>
     </AuthProvider>

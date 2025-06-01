@@ -98,14 +98,9 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter your email address"
-                    {...field}
-                  />
+                  <Input placeholder="Enter your email address" {...field} />
                 </FormControl>
-                <FormDescription>
-                  Enter your email address.
-                </FormDescription>
+                <FormDescription>Enter your email address.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

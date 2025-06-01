@@ -16,13 +16,16 @@ export function SessionMonitor({ children }: SessionMonitorProps) {
   useEffect(() => {
     if (status === "authenticated" && session?.accessToken && !isInitialized) {
       console.log("[SessionMonitor] Session initialized, validating token...");
-      
+
       validateAndRefreshToken()
         .then((result) => {
           if (result.isValid) {
             console.log("[SessionMonitor] Token validation successful");
           } else {
-            console.warn("[SessionMonitor] Token validation failed:", result.error);
+            console.warn(
+              "[SessionMonitor] Token validation failed:",
+              result.error
+            );
           }
         })
         .catch(console.error)
