@@ -54,8 +54,10 @@ export class AuthService {
 
   async signIn(user: User) {
     const tokenPayload = {
+      name: user.name,
       username: user.username,
       email: user.email,
+      image: user.image,
       id: user.id,
     };
 
@@ -65,6 +67,8 @@ export class AuthService {
       accessToken,
       username: user.username,
       email: user.email,
+      image: user.image,
+      name: user.name,
       id: user.id,
     };
   }
@@ -121,8 +125,10 @@ export class AuthService {
     try {
       // Generate new token with the same payload
       const tokenPayload = {
+        name: userPayload.name,
         username: userPayload.username,
         email: userPayload.email,
+        image: userPayload.image,
         id: userPayload.id,
       };
 
@@ -133,6 +139,8 @@ export class AuthService {
         username: userPayload.username,
         email: userPayload.email,
         id: userPayload.id,
+        image: userPayload.image,
+        name: userPayload.name,
         refreshedAt: new Date().toISOString(),
       };
     } catch (error) {

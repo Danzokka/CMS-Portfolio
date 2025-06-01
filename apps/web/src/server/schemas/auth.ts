@@ -7,11 +7,15 @@ interface User {
   id: string;
   username: string;
   email: string;
+  name: string;
+  image: string
   accessToken: string;
 }
 
 interface AuthResponse {
   accessToken: string;
+  name: string;
+  image: string;
   username: string;
   email: string;
   id: string;
@@ -106,7 +110,9 @@ export const authOptions: NextAuthOptions = {
           // Make request to your NestJS backend - correct route
           const response = await api.post<AuthResponse>("/auth", loginData);
 
-          const { accessToken, username, email, id } = response.data;
+          console.log(response.data);
+
+          const { accessToken, username, email, id, name, image } = response.data;
 
           if (!accessToken) {
             console.error("[NextAuth] No access token received from backend");
@@ -120,6 +126,8 @@ export const authOptions: NextAuthOptions = {
             username,
             email,
             accessToken,
+            name,
+            image
           };
         } catch (error: unknown) {
           console.error(
