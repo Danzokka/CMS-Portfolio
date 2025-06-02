@@ -8,7 +8,7 @@ interface User {
   username: string;
   email: string;
   name: string;
-  image: string
+  image: string;
   accessToken: string;
 }
 
@@ -112,7 +112,8 @@ export const authOptions: NextAuthOptions = {
 
           console.log(response.data);
 
-          const { accessToken, username, email, id, name, image } = response.data;
+          const { accessToken, username, email, id, name, image } =
+            response.data;
 
           if (!accessToken) {
             console.error("[NextAuth] No access token received from backend");
@@ -127,7 +128,7 @@ export const authOptions: NextAuthOptions = {
             email,
             accessToken,
             name,
-            image
+            image,
           };
         } catch (error: unknown) {
           console.error(
@@ -179,6 +180,8 @@ export const authOptions: NextAuthOptions = {
         id: token.id as string,
         username: token.username as string,
         email: token.email as string,
+        name: token.name as string,
+        image: token.image as string,
       };
 
       // If there's an error, force logout
@@ -198,6 +201,6 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
     error: "/login", // Redirect to login page on error
   },
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
 };

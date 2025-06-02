@@ -6,7 +6,6 @@ import { z } from "zod";
 import { useState, useTransition } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -59,6 +58,8 @@ export function LoginForm() {
           redirect: false,
         });
 
+        console.log("[LoginForm] SignIn result:", result);
+
         if (result?.error) {
           console.error("[LoginForm] Authentication failed:", result.error);
           setError(
@@ -69,6 +70,7 @@ export function LoginForm() {
 
         if (result?.ok) {
           console.log("[LoginForm] Login successful, redirecting...");
+          // Use router.push em vez de window.location.href para melhor UX
           router.push("/dashboard");
           return;
         }
