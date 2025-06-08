@@ -1,21 +1,21 @@
 {
   "chat.promptFiles": true,
+  "chat.instructionsFilesLocations": {
+    ".github/instructions": true
+  },
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-  "chat.instructionsFilesLocations": [
-    ".github/instructions"
-  ],
-  "chat.promptFilesLocations": [
-    ".github/prompts"
-  ],
   "github.copilot.chat.codeGeneration.instructions": [
     {
-      "text": "Always add TypeScript types for all new code"
+      "file": ".github/instructions/copilot.instructions.md"
     },
     {
-      "text": "Follow the project's architectural patterns and naming conventions"
+      "file": ".github/instructions/frontend.instructions.md"
     },
     {
-      "text": "Include comprehensive error handling and logging"
+      "file": ".github/instructions/backend.instructions.md"
+    },
+    {
+      "file": ".github/instructions/services.instructions.md"
     }
   ],
   "github.copilot.chat.testGeneration.instructions": [
