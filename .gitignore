@@ -4,6 +4,7 @@
 node_modules
 .pnp
 .pnp.js
+/.github/prompts
 
 # Local env files
 .env
