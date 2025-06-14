@@ -1,34 +1,85 @@
-# Turborepo starter
+# 🚀 Portfolio CMS - Turborepo
 
-This Turborepo starter is maintained by the Turborepo core team.
+Um sistema de gerenciamento de conteúdo (CMS) para portfólio pessoal, construído com tecnologias modernas e containerizado com Docker.
 
-## Using this example
+## 📚 Stack Tecnológica
 
-Run the following command:
+### Frontend
 
-```sh
-npx create-turbo@latest
+- **Next.js 15+** com App Router
+- **React 19+** com Server Components
+- **TypeScript** para type safety
+- **Tailwind CSS + Shadcn UI** para styling
+- **React Query** para data fetching
+
+### Backend
+
+- **NestJS** com TypeScript
+- **Prisma ORM** com PostgreSQL
+- **JWT** para autenticação
+- **Class Validator** para validação
+
+### DevOps
+
+- **Docker & Docker Compose** para containerização
+- **PostgreSQL** (Bitnami) para banco de dados
+- **NGINX** como reverse proxy (produção)
+- **Turbo** para monorepo management
+
+## 🐳 Desenvolvimento com Docker
+
+### Início Rápido
+
+```bash
+# 1. Clone o repositório
+git clone <repo-url>
+cd CMS-Portfolio
+
+# 2. Configure os ambientes
+cp apps/api/.env.example apps/api/.env.local
+cp apps/web/.env.example apps/web/.env.local
+
+# 3. Inicie o ambiente de desenvolvimento
+./scripts/dev.sh up
 ```
 
-## What's inside?
+### Serviços Disponíveis
 
-This Turborepo includes the following packages/apps:
+| Serviço     | URL                   | Descrição            |
+| ----------- | --------------------- | -------------------- |
+| Frontend    | http://localhost:3000 | Interface do usuário |
+| Backend API | http://localhost:5000 | API REST             |
+| Database    | localhost:5432        | PostgreSQL           |
 
-### Apps and Packages
+### Comandos Úteis
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+```bash
+# Gerenciar ambiente
+./scripts/dev.sh up          # Iniciar todos os serviços
+./scripts/dev.sh down        # Parar todos os serviços
+./scripts/dev.sh logs api    # Ver logs da API
+./scripts/dev.sh restart     # Reiniciar serviços
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+# Prisma
+./scripts/dev.sh prisma migrate    # Executar migrações
+./scripts/dev.sh prisma generate   # Gerar client
+./scripts/dev.sh prisma studio     # Abrir Prisma Studio
 
-### Utilities
+# Desenvolvimento
+./scripts/dev.sh shell api    # Acessar container da API
+./scripts/dev.sh shell web    # Acessar container do Web
+```
 
-This Turborepo has some additional tools already setup for you:
+## 📦 Desenvolvimento Local (sem Docker)
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
+### Pré-requisitos
+
+- Node.js 18+
+- PostgreSQL 15+
+- npm
+
+### Setup
+
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 

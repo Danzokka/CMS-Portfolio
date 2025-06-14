@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: bitnami/postgresql:15
+    container_name: portfolio-postgres-dev
+    restart: unless-stopped
+    environment:
+      - POSTGRESQL_USERNAME=portfolio
+      - POSTGRESQL_PASSWORD=portfolio123
+      - POSTGRESQL_DATABASE=portfolio_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/bitnami/postgresql
+    networks:
+      - db-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portfolio -d portfolio_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # NestJS API
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: portfolio-api-dev
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://portfolio:portfolio123@postgres:5432/portfolio_dev?schema=public
+      - PORT=5000
+      - NODE_ENV=development
+      - JWT_SECRET=dev-super-secret-jwt-key-min-64-characters-for-security-purposes
+      - CORS_ORIGIN=http://localhost:3000
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+      - /app/dist
+    networks:
+      - app-network
+      - db-network
+    command: ["npm", "run", "dev"]
+
+  # Next.js Web App
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: portfolio-web-dev
+    restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=dev-nextauth-secret-key-min-32-characters
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - app-network
+    command: ["npm", "run", "dev"]
+
+networks:
+  app-network:
+    driver: bridge
+  db-network:
+    driver: bridge
+
+volumes:
+  postgres_dev_data:
