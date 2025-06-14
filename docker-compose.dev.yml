@@ -3,13 +3,13 @@ version: "3.8"
 services:
   # PostgreSQL Database
   postgres:
-    image: bitnami/postgresql:15
+    image: bitnami/postgresql:latest
     container_name: portfolio-postgres-dev
     restart: unless-stopped
     environment:
-      - POSTGRESQL_USERNAME=portfolio
-      - POSTGRESQL_PASSWORD=portfolio123
-      - POSTGRESQL_DATABASE=portfolio_dev
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_DATABASE=postgres
     ports:
       - "5432:5432"
     volumes:
@@ -17,7 +17,7 @@ services:
     networks:
       - db-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U portfolio -d portfolio_dev"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
