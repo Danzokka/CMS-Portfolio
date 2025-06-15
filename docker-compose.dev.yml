@@ -27,6 +27,7 @@ services:
     build:
       context: ./apps/api
       dockerfile: Dockerfile
+      target: development
     container_name: portfolio-api-dev
     restart: unless-stopped
     environment:
@@ -46,7 +47,7 @@ services:
       - ./apps/api:/app
       - /app/node_modules
       - /app/dist
-      - uploads_data:/app/uploads
+      - uploads_data:/app/uploads:z
     networks:
       - app-network
       - db-network
@@ -61,7 +62,7 @@ services:
       - "8080:80"
     volumes:
       - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf
-      - uploads_data:/var/www/uploads
+      - uploads_data:/var/www/uploads:z
     depends_on:
       - api
       - web
