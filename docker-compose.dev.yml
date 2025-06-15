@@ -35,6 +35,8 @@ services:
       - NODE_ENV=development
       - JWT_SECRET=dev-super-secret-jwt-key-min-64-characters-for-security-purposes
       - CORS_ORIGIN=http://localhost:3000
+      - UPLOAD_PATH=/app/uploads
+      - STATIC_URL=http://localhost:8080/uploads
     ports:
       - "5000:5000"
     depends_on:
@@ -44,10 +46,27 @@ services:
       - ./apps/api:/app
       - /app/node_modules
       - /app/dist
+      - uploads_data:/app/uploads
     networks:
       - app-network
       - db-network
     command: ["npm", "run", "dev"]
+
+  # Nginx for serving static files
+  nginx:
+    image: nginx:alpine
+    container_name: portfolio-nginx-dev
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf
+      - uploads_data:/var/www/uploads
+    depends_on:
+      - api
+      - web
+    networks:
+      - app-network
 
   # Next.js Web App
   web:
@@ -81,3 +100,4 @@ networks:
 
 volumes:
   postgres_dev_data:
+  uploads_data:

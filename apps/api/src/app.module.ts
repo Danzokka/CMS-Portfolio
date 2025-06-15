@@ -16,6 +16,7 @@ import { UserController } from './user/user.controller';
 import { AuthController } from './auth/auth.controller';
 import { ReviewModule } from './review/review.module';
 import { ReviewService } from './review/review.service';
+import { UploadModule } from './upload/upload.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -25,6 +26,7 @@ import { ConfigModule } from '@nestjs/config';
     PostModule,
     AuthModule,
     ReviewModule,
+    UploadModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',

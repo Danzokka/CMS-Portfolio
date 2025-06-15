@@ -1,5 +1,6 @@
 ---
 applyTo: "apps/web/**/*.{ts,tsx,js,jsx}"
+tools: ["fetch", "get-library-docs "]
 ---
 
 # Frontend Development Guidelines - Next.js + React
