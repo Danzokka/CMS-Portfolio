@@ -13,6 +13,9 @@
     },
     {
       "file": ".github/instructions/services.instructions.md"
+    },
+    {
+      "file": ".github/instructions/memory.instructions.md"
     }
   ],
   "github.copilot.chat.testGeneration.instructions": [
