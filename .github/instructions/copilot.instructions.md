@@ -1,6 +1,5 @@
 ---
 applyTo: "**"
-tools: ['codebase', 'fetch', 'get-library-docs', 'search_code', 'searchResults', 'sequentialthinking', 'create_entities', 'add_observations', 'create_relations', 'read_graph']
 ---
 
 # GitHub Copilot General Instructions
