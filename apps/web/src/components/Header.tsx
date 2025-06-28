@@ -13,7 +13,7 @@ const Header = () => {
 
   return (
     <header className="h-24">
-      <div className="flex h-full w-full items-center justify-around gap-8 px-4 sm:px-6 lg:px-8">
+      <div className="flex h-full w-full items-center justify-around gap-8">
         <Link className="block text-teal-600 dark:text-teal-300" href="/">
           <span className="sr-only">Home</span>
           <Logo />

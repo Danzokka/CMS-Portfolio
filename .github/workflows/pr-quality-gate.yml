@@ -6,7 +6,7 @@ on:
     branches: [main, develop]
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: "18"
   PR_SIZE_LIMIT: 1000
   COMPLEXITY_THRESHOLD: 50
 
@@ -90,7 +90,7 @@ jobs:
           AFFECTED_APPS=""
           [[ $API_CHANGES -gt 0 ]] && AFFECTED_APPS="$AFFECTED_APPS api"
           [[ $WEB_CHANGES -gt 0 ]] && AFFECTED_APPS="$AFFECTED_APPS web"
-          
+
           echo "affected_apps=${AFFECTED_APPS}" >> $GITHUB_OUTPUT
 
           # Generate workspace impact summary
@@ -150,7 +150,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: 📦 Install dependencies
         run: npm ci --prefer-offline --no-audit
@@ -173,20 +173,20 @@ jobs:
       - name: 🔨 Verify build (affected workspaces only)
         run: |
           echo "🔨 Testing build process..."
-          
+
           HAS_API_CHANGES="${{ needs.pr-analysis.outputs.has-api-changes }}"
           HAS_WEB_CHANGES="${{ needs.pr-analysis.outputs.has-web-changes }}"
-          
+
           if [[ "$HAS_API_CHANGES" == "true" ]]; then
             echo "🏗️ Building API workspace..."
             npm run build --workspace=apps/api
           fi
-          
+
           if [[ "$HAS_WEB_CHANGES" == "true" ]]; then
             echo "🏗️ Building Web workspace..."
             npm run build --workspace=apps/web
           fi
-          
+
           if [[ "$HAS_API_CHANGES" == "false" && "$HAS_WEB_CHANGES" == "false" ]]; then
             echo "✅ No workspace changes detected, skipping build verification"
           fi
@@ -204,7 +204,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: 📦 Install dependencies
         run: npm ci --prefer-offline --no-audit

@@ -3,39 +3,80 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": [
+        "^lint"
+      ]
     },
     "format": {
-      "dependsOn": ["^format"]
+      "dependsOn": [
+        "^format"
+      ]
     },
     "format:check": {
-      "dependsOn": ["^format:check"]
+      "dependsOn": [
+        "^format:check"
+      ]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": [
+        "^check-types"
+      ]
     },
     "test": {
-      "dependsOn": ["^test"],
-      "inputs": ["$TURBO_DEFAULT$", "**/*.{test,spec}.{ts,tsx,js,jsx}"],
-      "outputs": ["coverage/**"]
+      "dependsOn": [
+        "^test"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.{test,spec}.{ts,tsx,js,jsx}"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
     },
     "test:unit": {
-      "dependsOn": ["^test:unit"],
-      "inputs": ["$TURBO_DEFAULT$", "**/*.{test,spec}.{ts,tsx,js,jsx}"]
+      "dependsOn": [
+        "^test:unit"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.{test,spec}.{ts,tsx,js,jsx}"
+      ]
     },
     "test:e2e": {
-      "dependsOn": ["^test:e2e"],
-      "inputs": ["$TURBO_DEFAULT$", "**/*.{test,spec}.{ts,tsx,js,jsx}"]
+      "dependsOn": [
+        "^test:e2e"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.{test,spec}.{ts,tsx,js,jsx}"
+      ]
     },
     "test:coverage": {
-      "dependsOn": ["^test:coverage"],
-      "inputs": ["$TURBO_DEFAULT$", "**/*.{test,spec}.{ts,tsx,js,jsx}"],
-      "outputs": ["coverage/**"]
+      "dependsOn": [
+        "^test:coverage"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.{test,spec}.{ts,tsx,js,jsx}"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
     },
     "dev": {
       "cache": false,

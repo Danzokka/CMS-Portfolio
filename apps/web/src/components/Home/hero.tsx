@@ -5,7 +5,7 @@ import { BoxReveal } from "../magicui/box-reveal";
 
 const Hero = () => {
   return (
-    <div className="flex flex-col w-full justify-between gap-6 py-10 px-8">
+    <div className="flex flex-col w-full justify-between gap-6 py-10">
       <div className="max-w-2xl">
         <div className="flex items-center gap-2">
           <TypingAnimation

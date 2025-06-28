@@ -3,12 +3,12 @@ name: 🚀 Build & Deploy
 on:
   push:
     branches: [main]
-    tags: ['v*']
+    tags: ["v*"]
   release:
     types: [published]
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: "18"
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         service: [api, web]
-    
+
     outputs:
       api-image: ${{ steps.meta-api.outputs.tags }}
       web-image: ${{ steps.meta-web.outputs.tags }}
@@ -115,13 +115,13 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.service }}:${{ github.sha }}
-          format: 'sarif'
-          output: 'trivy-results-${{ matrix.service }}.sarif'
+          format: "sarif"
+          output: "trivy-results-${{ matrix.service }}.sarif"
 
       - name: 📊 Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results-${{ matrix.service }}.sarif'
+          sarif_file: "trivy-results-${{ matrix.service }}.sarif"
 
   deploy-staging:
     name: 🎭 Deploy to Staging
@@ -139,28 +139,28 @@ jobs:
           echo "🚀 Deploying to staging..."
           echo "API Image: ${{ needs.build-and-push.outputs.api-image }}"
           echo "Web Image: ${{ needs.build-and-push.outputs.web-image }}"
-          
+
           # Here you would typically:
           # 1. Connect to your staging environment
           # 2. Update docker-compose files with new image tags
           # 3. Run docker-compose up -d
           # 4. Run health checks
-          
+
           echo "✅ Staging deployment completed"
 
       - name: 🧪 Run staging health checks
         run: |
           echo "🧪 Running staging health checks..."
-          
+
           # Wait for services to start
           sleep 30
-          
+
           # Health check API
           # curl -f http://staging-api.youromain.com/health || exit 1
-          
+
           # Health check Web
           # curl -f http://staging.yourdomain.com/api/health || exit 1
-          
+
           echo "✅ All staging health checks passed"
 
   deploy-production:
@@ -179,28 +179,28 @@ jobs:
           echo "🌟 Deploying to production..."
           echo "API Image: ${{ needs.build-and-push.outputs.api-image }}"
           echo "Web Image: ${{ needs.build-and-push.outputs.web-image }}"
-          
+
           # Here you would typically:
           # 1. Connect to your production environment
           # 2. Update docker-compose files with new image tags
           # 3. Run rolling deployment
           # 4. Run comprehensive health checks
-          
+
           echo "✅ Production deployment completed"
 
       - name: 🧪 Run production health checks
         run: |
           echo "🧪 Running production health checks..."
-          
+
           # Wait for services to start
           sleep 60
-          
+
           # Health check API
           # curl -f https://api.yourdomain.com/health || exit 1
-          
+
           # Health check Web
           # curl -f https://yourdomain.com/api/health || exit 1
-          
+
           echo "✅ All production health checks passed"
 
       - name: 📢 Create deployment summary

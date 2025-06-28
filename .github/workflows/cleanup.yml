@@ -3,13 +3,13 @@ name: 🧹 Cleanup & Maintenance
 on:
   schedule:
     # Run weekly on Sundays at 2:00 AM UTC
-    - cron: '0 2 * * 0'
+    - cron: "0 2 * * 0"
   workflow_dispatch:
     inputs:
       cleanup_type:
-        description: 'Type of cleanup to perform'
+        description: "Type of cleanup to perform"
         required: true
-        default: 'all'
+        default: "all"
         type: choice
         options:
           - all
@@ -18,7 +18,7 @@ on:
           - dependencies
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: "18"
 
 jobs:
   cleanup-docker-images:
@@ -40,16 +40,16 @@ jobs:
       - name: 🧹 Delete old container images
         uses: actions/delete-package-versions@v4
         with:
-          package-name: '${{ github.repository }}/api'
-          package-type: 'container'
+          package-name: "${{ github.repository }}/api"
+          package-type: "container"
           min-versions-to-keep: 10
           delete-only-untagged-versions: true
 
       - name: 🧹 Delete old container images (web)
         uses: actions/delete-package-versions@v4
         with:
-          package-name: '${{ github.repository }}/web'
-          package-type: 'container'
+          package-name: "${{ github.repository }}/web"
+          package-type: "container"
           min-versions-to-keep: 10
           delete-only-untagged-versions: true
 
@@ -65,10 +65,10 @@ jobs:
       - name: 🗂️ Cleanup old cache entries
         run: |
           echo "🗂️ Cleaning up old cache entries..."
-          
+
           # List all caches
           gh api repos/${{ github.repository }}/actions/caches --paginate | jq -r '.actions_caches[] | select(.created_at < (now - 604800)) | .id' > cache_ids.txt
-          
+
           # Delete old caches (older than 7 days)
           if [ -s cache_ids.txt ]; then
             while read cache_id; do
@@ -95,7 +95,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: 📦 Install dependencies
         run: npm ci --prefer-offline --no-audit
@@ -103,10 +103,10 @@ jobs:
       - name: 🔍 Check for outdated dependencies
         run: |
           echo "🔍 Checking for outdated dependencies..."
-          
+
           # Create outdated report
           npm outdated --json > outdated.json || true
-          
+
           if [ -s outdated.json ] && [ "$(cat outdated.json)" != "{}" ]; then
             echo "## 📦 Outdated Dependencies Report" >> $GITHUB_STEP_SUMMARY
             echo "| Package | Current | Wanted | Latest |" >> $GITHUB_STEP_SUMMARY
@@ -124,10 +124,10 @@ jobs:
       - name: 🔒 Security audit
         run: |
           echo "🔒 Running security audit..."
-          
+
           # Run audit and capture result
           npm audit --audit-level moderate --json > audit.json || AUDIT_FAILED=true
-          
+
           if [ "$AUDIT_FAILED" = "true" ]; then
             echo "## 🔒 Security Vulnerabilities Found" >> $GITHUB_STEP_SUMMARY
             
@@ -162,7 +162,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: 📦 Install dependencies
         run: npm ci --prefer-offline --no-audit
@@ -173,17 +173,17 @@ jobs:
       - name: 📊 Analyze bundle sizes
         run: |
           echo "📊 Analyzing bundle sizes..."
-          
+
           echo "## 📊 Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
           echo "| Application | Type | Size |" >> $GITHUB_STEP_SUMMARY
           echo "|-------------|------|------|" >> $GITHUB_STEP_SUMMARY
-          
+
           # API build size
           if [ -d "apps/api/dist" ]; then
             API_SIZE=$(du -sh apps/api/dist | cut -f1)
             echo "| API | Build Output | $API_SIZE |" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Web build size
           if [ -d "apps/web/.next" ]; then
             WEB_SIZE=$(du -sh apps/web/.next | cut -f1)
@@ -195,7 +195,7 @@ jobs:
               echo "| Web | Static Assets | $STATIC_SIZE |" >> $GITHUB_STEP_SUMMARY
             fi
           fi
-          
+
           # Node modules size (for reference)
           NODE_MODULES_SIZE=$(du -sh node_modules | cut -f1)
           echo "| Root | Dependencies | $NODE_MODULES_SIZE |" >> $GITHUB_STEP_SUMMARY
@@ -204,7 +204,13 @@ jobs:
     name: 📋 Cleanup Summary
     runs-on: ubuntu-latest
     if: always()
-    needs: [cleanup-docker-images, cleanup-cache, dependency-check, performance-check]
+    needs:
+      [
+        cleanup-docker-images,
+        cleanup-cache,
+        dependency-check,
+        performance-check,
+      ]
 
     steps:
       - name: 📋 Generate cleanup summary
@@ -212,18 +218,18 @@ jobs:
           echo "## 🧹 Maintenance & Cleanup Summary" >> $GITHUB_STEP_SUMMARY
           echo "| Task | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
-          
+
           # Check job results
           IMAGES_STATUS="${{ needs.cleanup-docker-images.result }}"
           CACHE_STATUS="${{ needs.cleanup-cache.result }}"
           DEPS_STATUS="${{ needs.dependency-check.result }}"
           PERF_STATUS="${{ needs.performance-check.result }}"
-          
+
           echo "| Docker Images Cleanup | $([[ $IMAGES_STATUS == 'success' ]] && echo '✅' || [[ $IMAGES_STATUS == 'skipped' ]] && echo '⏭️' || echo '❌') $IMAGES_STATUS |" >> $GITHUB_STEP_SUMMARY
           echo "| Cache Cleanup | $([[ $CACHE_STATUS == 'success' ]] && echo '✅' || [[ $CACHE_STATUS == 'skipped' ]] && echo '⏭️' || echo '❌') $CACHE_STATUS |" >> $GITHUB_STEP_SUMMARY
           echo "| Dependency Check | $([[ $DEPS_STATUS == 'success' ]] && echo '✅' || [[ $DEPS_STATUS == 'skipped' ]] && echo '⏭️' || echo '❌') $DEPS_STATUS |" >> $GITHUB_STEP_SUMMARY
           echo "| Performance Check | $([[ $PERF_STATUS == 'success' ]] && echo '✅' || [[ $PERF_STATUS == 'skipped' ]] && echo '⏭️' || echo '❌') $PERF_STATUS |" >> $GITHUB_STEP_SUMMARY
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "🕒 **Maintenance completed at**: $(date)" >> $GITHUB_STEP_SUMMARY
           echo "🔄 **Next scheduled run**: Next Sunday at 2:00 AM UTC" >> $GITHUB_STEP_SUMMARY

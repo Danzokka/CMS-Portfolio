@@ -11,6 +11,7 @@ Your documentation is on [memory_mcp](https://github.com/modelcontextprotocol/se
 This is a modern Portfolio CMS platform built with NestJS and Next.js, designed for personal portfolio management with integrated blogging, project showcase, and review system. The system uses a Turborepo monorepo architecture with comprehensive CI/CD pipelines, automated testing, and Docker containerization.
 
 **Key Quality Standards:**
+
 - 🔒 **Security First**: Branch protection, security scanning, dependency auditing
 - 🧪 **Test-Driven**: Unit tests (≥85% coverage), E2E tests, integration tests
 - 🚀 **CI/CD Excellence**: Automated quality gates, multi-stage deployments
