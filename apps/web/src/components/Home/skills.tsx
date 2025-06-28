@@ -4,7 +4,7 @@ import React from "react";
 
 const SkillIcon = ({ icon }: { icon: string }) => (
   console.log(icon),
-  <img src={icon} alt="Skill Icon" width={32} height={32} className="size-8" />
+  <img src={icon} alt="Skill Icon" className="size-24" />
 );
 
 const Skills = async () => {
@@ -12,10 +12,10 @@ const Skills = async () => {
   const skills = await getSkills();
 
   return (
-    <>
+    <div className="flex gap-4">
       <SkillIcon icon={skills[0]?.icon} />
       <SkillIcon icon={skills[1]?.icon} />
-    </>
+    </div>
   );
 };
 
