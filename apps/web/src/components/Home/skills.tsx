@@ -4,7 +4,7 @@ import React from "react";
 
 const SkillIcon = ({ icon }: { icon: string }) => (
   console.log(icon),
-  <img src={icon} alt="Skill Icon" className="size-24" />
+  <img src={icon} alt="Skill Icon" className="size-18" />
 );
 
 const Skills = async () => {
